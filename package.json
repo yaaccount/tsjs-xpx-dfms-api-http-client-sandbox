@@ -2,24 +2,30 @@
   "name": "tsjs-xpx-dfms-api-http-client-sandbox",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "ng": "node patch.js && ng",
+    "start": "node patch.js && ng serve",
+    "build": "node patch.js && ng build",
+    "test": "node patch.js && ng test",
+    "lint": "node patch.js && ng lint",
+    "e2e": "node patch.js && ng e2e"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~8.2.14",
+    "@angular/cdk": "~8.2.3",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
     "@angular/core": "~8.2.14",
     "@angular/forms": "~8.2.14",
+    "@angular/material": "^8.2.3",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "file-saver": "^2.0.2",
+    "hammerjs": "^2.0.8",
     "rxjs": "~6.4.0",
+    "tsjs-xpx-chain-sdk": "^0.7.0",
+    "tsjs-xpx-dfms-api-http": "file:///../tsjs-xpx-dfms-api-http",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
@@ -43,5 +49,13 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
+  },
+  "browser": {
+    "http": false,
+    "https": false,
+    "net": false,
+    "path": false,
+    "stream": false,
+    "tls": false
   }
 }

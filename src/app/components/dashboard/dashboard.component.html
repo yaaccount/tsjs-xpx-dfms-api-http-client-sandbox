@@ -1,0 +1,44 @@
+<p>{{contract ? contract.drive : "nothing here"}}</p>
+
+<div [style.visibility]="cwd ? 'visible' : 'hidden'">
+  <a *ngFor="let pathComponent of cwd?.pathComponents" class ='btn' ><b (click)="onCd(pathComponent)">{{pathComponent.stat.name==="/" ? "cwd: " + pathComponent.stat.name : pathComponent.stat.name + "/"}}</b></a>
+  <input [value]="newName" (input)="newName = $event.target.value" /><button (click)="onMkdir(cwd, newName)">create folder</button>
+</div>
+
+<div style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px;">
+  <div *ngFor="let child of cwdLs; index as i">
+    <div *ngIf="child.stat.type===1; then thenFolderBlock else elseFileBlock"></div>
+    <ng-template #thenFolderBlock>
+      <b (click)="onCd(child)">[{{child.stat.name}}]</b>
+    </ng-template>
+    <ng-template #elseFileBlock>
+      <b (click)="onGet(child)">{{child.stat.name}}</b> ({{child.stat.size}})
+    </ng-template>
+    <a (click)="onDelete(child)">&nbsp;&#x2716;&nbsp;</a>
+    <a (click)="onGet(child)">&nbsp;&dArr;&nbsp;</a>
+    <a (click)="onCopy(child)">&nbsp;&#x271A;&nbsp;</a>
+    <a (click)="renameShown = (renameShown==i ? -1 : i)">&nbsp;&rArr;&nbsp;</a>
+    <input  [style.visibility]="renameShown==i ? 'visible' : 'hidden'" [value]="newName" (input)="newName = $event.target.value"/>
+    <button [style.visibility]="renameShown==i ? 'visible' : 'hidden'" (click)="onRename(child, newName)">rename</button>
+  </div>
+</div>
+
+<div>
+    files:
+    <input
+    type="file"
+    #file
+    (change)="onFilesAdded()"
+    multiple
+  />
+</div>
+
+<div>
+    folder:
+    <input
+    type="file"
+    #folder
+    (change)="onFolderAdded()"
+    webkitDirectory
+  >
+</div>
