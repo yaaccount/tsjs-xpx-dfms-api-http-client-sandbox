@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { ContractClientHttp, DriveFsHttp, Stat } from 'tsjs-xpx-dfms-api-http';
 import { Contract } from 'tsjs-xpx-dfms-api-http';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { saveAs } from 'file-saver';
+
+const streamSaver = require('streamsaver');
 
 export class Node {
   constructor(
@@ -103,8 +104,14 @@ export class ApiClientService {
   }
 
   public doGet(cid, node: Node, flush=true) {
-    this.driveFsHttp.getAsBlob(cid, node.path, flush).subscribe(blob => {
-      saveAs(blob, node.stat.name + '.tar');
+    this.driveFsHttp.getAsResponse(cid, node.path, flush).subscribe(response => {
+      const fileStream = streamSaver.createWriteStream(node.stat.name + '.tar', {
+        // size: 22, // (optional) Will show progress
+        // writableStrategy: undefined, // (optional)
+        // readableStrategy: undefined  // (optional)
+      });
+
+      response.body.pipeTo(fileStream);
     });
   }
 

@@ -3,12 +3,12 @@
 
 # Notes
 - tested with locally running dfms v0.6.1 - localhost:6366
-- to make it working in Chrome with locally running dev server (port 4200), I had to hide the dfms service behind nginx, and configure nginx to
+- to make it working in Chrome/Firefox with locally running dev server (port 4200), I had to hide the dfms service behind nginx, and configure nginx to
     -  add CORS headers to the responses (GET, POST)
         - ```
             add_header 'Access-Control-Allow-Origin' '*';
             ```
-    - remove ```Referer``` and ```Origin``` headers from requests (added automatically by Chrome)
+    - remove ```Referer``` and ```Origin``` headers from requests (added automatically by browser)
         - ```
             proxy_set_header Referer "";
             proxy_set_header Origin "";
