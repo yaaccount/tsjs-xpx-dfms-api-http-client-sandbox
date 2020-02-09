@@ -1,6 +1,24 @@
 # Warning!
 ## Do not use for production! This is just personal playground/sandbox demonstrating the basic usage of the tsjs-xpx-dfms-api, intended only for manual testing. Additionally, my frontend/GUI skills and aesthetic perception is next to none.
 
+# Notes
+- tested with locally running dfms v0.6.1 - localhost:6366
+- to make it working in Chrome with locally running dev server (port 4200), I had to hide the dfms service behind nginx, and configure nginx to
+    -  add CORS headers to the responses (GET, POST)
+        - ```
+            add_header 'Access-Control-Allow-Origin' '*';
+            ```
+    - remove ```Referer``` and ```Accept``` headers from requests
+        - ```
+            proxy_set_header Referer "";
+            proxy_set_header Origin "";
+            ```
+    - allow big payloads and dont' buffer them
+        - ```
+            client_max_body_size 8G;
+            proxy_request_buffering off;
+            ```
+
 # TsjsXpxDfmsApiHttpClientSandbox
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.24.

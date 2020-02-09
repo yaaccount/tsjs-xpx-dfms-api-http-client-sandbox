@@ -16,8 +16,8 @@ export class DataService {
   private _roots: Map<string, Node> = new Map();
   private _cwd: Node = undefined;
   private _cwdSubj = new BehaviorSubject<Node>(this._cwd);
-  private _cwdLs: Node[] = [];
-  private _cwdLsSubj = new BehaviorSubject<Node[]>(this._cwdLs);
+  private _children: Node[] = [];
+  private _childrenSubj = new BehaviorSubject<Node[]>(this._children);
 
   constructor(api_client: ApiClientService) {
     this._api_client = api_client;
@@ -31,8 +31,8 @@ export class DataService {
     });
 
     this._api_client.ls.subscribe(children => {
-      this._cwdLs = children;
-      this._cwdLsSubj.next(this._cwdLs);
+      this._children = children;
+      this._childrenSubj.next(this._children);
     });
 
     this._api_client.contracts.subscribe(contracts => {
@@ -102,7 +102,7 @@ export class DataService {
     return this._cwdSubj;
   }
 
-  public get cwdLs() {
-    return this._cwdLsSubj;
+  public get children() {
+    return this._childrenSubj;
   }
 }

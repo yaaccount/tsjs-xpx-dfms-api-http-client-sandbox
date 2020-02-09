@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
       this.cwd = node;
     });
 
-    this._dataService.cwdLs.subscribe(nodes => {
+    this._dataService.children.subscribe(nodes => {
       this.cwdLs = nodes.sort((a, b) => {
         if (a.stat.type === b.stat.type) {
           if (a.stat.name > b.stat.name) return 1;
