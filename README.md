@@ -1,3 +1,6 @@
+# Warning!
+## Do not use for production! This is just personal playground/sandbox demonstrating the basic usage of the tsjs-xpx-dfms-api, intended only for manual testing. Additionally, my frontend/GUI skills and aesthetic perception is next to none.
+
 # TsjsXpxDfmsApiHttpClientSandbox
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.24.
