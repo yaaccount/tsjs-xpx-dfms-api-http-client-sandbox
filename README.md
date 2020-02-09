@@ -8,12 +8,12 @@
         - ```
             add_header 'Access-Control-Allow-Origin' '*';
             ```
-    - remove ```Referer``` and ```Accept``` headers from requests
+    - remove ```Referer``` and ```Origin``` headers from requests (added automatically by Chrome)
         - ```
             proxy_set_header Referer "";
             proxy_set_header Origin "";
             ```
-    - allow big payloads and dont' buffer them
+    - allow big payloads and don't buffer them
         - ```
             client_max_body_size 8G;
             proxy_request_buffering off;
