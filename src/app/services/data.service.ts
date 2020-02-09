@@ -59,8 +59,19 @@ export class DataService {
 
   public addFile(file: File) {
     const formData = new FormData();
-    formData.append("file", file, file.name);
+    formData.append('file', file, file.name);
     this._api_client.doAdd(this._cwd.cid, this._cwd, file.name, formData, false);
+  }
+
+  public addFolder(folderName: string, files: File[]) {
+    const formData = new FormData();
+    formData.append('file', new Blob([''], {
+      type: 'application/x-directory'
+    }), folderName);
+    files.forEach(file => {
+      formData.append('file', file, (file as any).webkitRelativePath ? (file as any).webkitRelativePath : folderName + '/' + file.name);
+    });
+    this._api_client.doAdd(this._cwd.cid, this._cwd, folderName, formData, false);
   }
 
   public deleteFile(node: Node) {
@@ -82,24 +93,6 @@ export class DataService {
   public get(node: Node) {
     this._api_client.doGet(this._cwd.cid, node);
   }
-
-  /*
-  public addFolder() {
-    const formData = new FormData();
-    formData.append("file[]", data0, {
-      contentType: "application/x-directory",
-      filepath: name0,
-  });
-  formData.append("file[]", data1, {
-      contentType: "application/octet-stream",
-      filepath: name0 + "/" + name1,
-  });
-  formData.append("file[]", data2, {
-      contentType: "application/octet-stream",
-      filepath: name0 + "/" + name2,
-  });
-
-  }*/
 
   public get selectedContract() {
     return this._selectedContractSubj;

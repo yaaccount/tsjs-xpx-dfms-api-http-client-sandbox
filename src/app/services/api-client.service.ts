@@ -37,12 +37,10 @@ export class Node {
 
 export class ApiClientService {
   // private url = "http://127.0.0.1:6366/api/v1";
-  // private url = "http://127.0.0.1:6366/api/v1";
+  // private url = "http://localhost:6366/api/v1";
   // private url = "http://localhost:4200/api/v1"; // proxied with proxy.conf.js
   private url = "http://localhost/api/v1"; // 6366 behind nginx proxy :80/api/v1 -> :6366/api/v1
-  // private url = "http://localhost.here:6366/api/v1"; // proxied with proxy.conf.js
   // private url = "http://testnet1.so.xpxsirius.io:6466/api/v1";
-  // private url = "http://localhost:6366/api/v1";
 
   private configuration = {
       basePath: this.url

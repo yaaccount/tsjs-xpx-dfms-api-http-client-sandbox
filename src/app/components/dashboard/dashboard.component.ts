@@ -81,13 +81,14 @@ export class DashboardComponent implements OnInit {
   onFolderAdded() {
     const files: { [key: string]: File } = this.folder.nativeElement.files;
     this.clearRenaming();
-    this.processFiles(files);
+    this.addFolder(files);
+    this.folder.nativeElement.value = "";
   }
 
   onFilesAdded() {
     const files: { [key: string]: File } = this.file.nativeElement.files;
     this.clearRenaming();
-    this.processFiles(files);
+    this.addFiles(files);
     this.file.nativeElement.value = "";
   }
 
@@ -96,19 +97,38 @@ export class DashboardComponent implements OnInit {
     this.renameShown = -1;
   }
 
-  private processFiles(files:  { [key: string]: File }) {
-    const fileSet = new Set<File>();
+  private addFiles(files:  { [key: string]: File }) {
+    const fileList = [] as File[];
     for (let key in files) {
       if (!isNaN(parseInt(key))) {
-        fileSet.add(files[key]);
+        fileList.push(files[key]);
       }
     }
-    fileSet.forEach(file => {
+    fileList.forEach(file => {
       console.log(((file as any).webkitRelativePath ? (file as any).webkitRelativePath : file.name) + " (" + file.size + ")");
     });
-    fileSet.forEach(file => {
+    fileList.forEach(file => {
       this._dataService.addFile(file);
     });
   }
 
+  private addFolder(files: { [key: string]: File }) {
+    const fileList = [] as File[];
+    for (let key in files) {
+      if (!isNaN(parseInt(key))) {
+        fileList.push(files[key]);
+      }
+    }
+    let folderName = undefined;
+    fileList.forEach(file => {
+      console.log(((file as any).webkitRelativePath ? (file as any).webkitRelativePath : file.name) + " (" + file.size + ")");
+      if (! folderName && (file as any).webkitRelativePath) {
+        const pathComponents = (file as any).webkitRelativePath.split('/');
+        if (pathComponents.length > 0) {
+          folderName = pathComponents[0];
+        }
+      }
+    });
+    this._dataService.addFolder(folderName, fileList);
+  }
 }
