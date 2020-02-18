@@ -1,8 +1,20 @@
 # Warning!
 ## Do not use for production! This is just personal playground/sandbox demonstrating the basic usage of the tsjs-xpx-dfms-api, intended only for manual testing. Additionally, my frontend/GUI skills and aesthetic perception is next to none.
 
+# Running - dev
+
+    $ git clone git@github.com:proximax-storage/tsjs-xpx-dfms-api-http.git
+    $ cd tsjs-xpx-dfms-api-http && npm i && npm run build && cd ..
+
+    $ git clone git@github.com:yaaccount/tsjs-xpx-dfms-api-http-client-sandbox.git
+    $ cd tsjs-xpx-dfms-api-http-client-sandbox
+    # now edit /src/app/services/api-client.service.ts - fill in your dfms service url
+    $ npm i && npm run start
+    # now open your browser at localhost:4200
+
+
 # Notes
-- tested with locally running dfms v0.6.1 - localhost:6366
+- tested with locally running dfms v0.6.3 - localhost:6366
 - to make it working in Chrome/Firefox with locally running dev server (port 4200), I had to hide the dfms service behind nginx, and configure nginx to
     -  add CORS headers to the responses (GET, POST)
         - ```
