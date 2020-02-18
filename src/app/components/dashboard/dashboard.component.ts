@@ -9,8 +9,8 @@ import { Node } from 'src/app/services/api-client.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('file', { static: false }) file;
-  @ViewChild('folder', { static: false }) folder;
+  @ViewChild('file') file;
+  @ViewChild('folder') folder;
   public newName: string;
   public renameShown = -1;
 

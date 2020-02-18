@@ -3,7 +3,7 @@ import { ContractClientHttp, DriveFsHttp, Stat } from 'tsjs-xpx-dfms-api-http';
 import { Contract } from 'tsjs-xpx-dfms-api-http';
 import { BehaviorSubject, Subject } from 'rxjs';
 
-const streamSaver = require('streamsaver');
+import * as streamSaver from 'streamsaver';
 
 export class Node {
   constructor(
@@ -73,6 +73,7 @@ export class ApiClientService {
   }
 
   public doAdd(cid: string, parent: Node, name: string, body: any, flush=true) {
+    // TODO: upload progress
     this.driveFsHttp.add(cid, parent.path + "/" + name, body, flush).subscribe(() => {
       this.doLs(cid, parent);
     });
@@ -104,15 +105,37 @@ export class ApiClientService {
   }
 
   public doGet(cid, node: Node, flush=true) {
-    this.driveFsHttp.getAsResponse(cid, node.path, flush).subscribe(response => {
+    this.driveFsHttp.getAsResponse(cid, node.path, flush).subscribe(async response => {
       const fileStream = streamSaver.createWriteStream(node.stat.name + '.tar', {
         // size: 22, // (optional) Will show progress
         // writableStrategy: undefined, // (optional)
         // readableStrategy: undefined  // (optional)
-      });
+      }) as WritableStream;
+      const readableStream = response.body;
 
-      response.body.pipeTo(fileStream);
-    });
+      // more optimized
+      // if (window.WritableStream && readableStream.pipeTo) {
+      //   return readableStream.pipeTo(fileStream)
+      //     .then(() => console.log('done writing'))
+      // }
+
+      const writer = fileStream.getWriter();
+      const reader = readableStream.getReader();
+
+      const totalLength = response.headers.get("Content-Length");
+      let receivedLength = 0;
+      const pump = () => reader.read()
+        .then(res => {
+          receivedLength += (res.value ? res.value.length : 0);
+          console.log("received " + receivedLength + " of total " + totalLength);
+          return res.done
+          ? writer.close()
+          : writer.write(res.value).then(pump) // NOTE: if the server feeds the data too quickly (i.e. service running on loopback)
+                                               // and the writer can not keep the pace, it gets loaded into memory - OOM is imminent
+                                               // - I had to limit my testing service to 20Mbps via nginx
+        });
+      pump()
+    })
   }
 
   public get contracts() {
